@@ -1,0 +1,9 @@
+import ModelTrainer
+
+class Spx1dLstmModelTrainer(ModelTrainer):
+    def __init__():
+        super().__init__()
+
+
+    
+    
