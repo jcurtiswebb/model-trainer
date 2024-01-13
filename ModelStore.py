@@ -1,4 +1,5 @@
-from torch import functional as nn
+import torch.nn as nn
+import torch
 
 class LSTM1(nn.Module):
     
