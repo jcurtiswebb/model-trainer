@@ -1,5 +1,5 @@
-from ModelTrainer import ModelTrainer
-from ModelStore import LSTM1
+from model_trainer import ModelTrainer
+from model_store import LSTM1
 from utils.YfinanceUtils import *
 from utils.ModelTrainerUtils import *
 from datetime import time
@@ -36,8 +36,8 @@ class Spx1dLstmModelTrainer(ModelTrainer):
     
 
 
-    def run():
+    def run(self):
         print("run implemented")
     
-    def post_results():
+    def post_results(self):
         x = 1

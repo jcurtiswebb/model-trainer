@@ -1,5 +1,5 @@
 import unittest
-from Spx1dLstmTrainer import Spx1dLstmModelTrainer
+from spx_1d_lstm_model_trainer import Spx1dLstmModelTrainer
 import mlflow
 
 class Test_ModelTrainer(unittest.TestCase):

@@ -9,7 +9,8 @@ class ModelTrainer(ABC):
         self._model = None
         self._data = None
         self._hyperparams = None
-        self._device = self.set_device()
+        self._device_1 = self.set_device()
+        self._device_2 = self.set_device(gpu=1)
         self._experiment = None
         self._last_trainable_trade_date = None
         self.CONFIG = {
@@ -28,7 +29,7 @@ class ModelTrainer(ABC):
         else: 
             dev = "cpu" 
         print(f"Device : {dev}")
-        self._device=torch.device(dev) 
+        return torch.device(dev) 
 
     @property
     def data(self):
@@ -58,7 +59,6 @@ class ModelTrainer(ABC):
         return self._experiment
     
     def update_experiment(self):
-        
         set_experiment = True
         
         if self._experiment is not None:
@@ -73,17 +73,18 @@ class ModelTrainer(ABC):
             curr_experiment = mlflow.set_experiment(f"{self.__class__.__name__}_{self._last_trainable_trade_date}")
             self._experiment = curr_experiment
 
+
     def update_data_and_experiment(self):
         self.update_data()
         self.update_experiment()
 
     
     @abstractmethod
-    def run():
+    def run(self):
         pass
 
     @abstractmethod
-    def post_results():
+    def post_results(self):
         pass
 
     def get_start_end_idx(self,test_set_len=252):
