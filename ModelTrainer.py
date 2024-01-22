@@ -1,15 +1,26 @@
 from abc import ABC, abstractmethod
 import torch
 import numpy as np
+import mlflow
 
 class ModelTrainer(ABC):
     def __init__(self):
-        self.schedule = {'M':('16:15:00', 23.5), 'T':('16:15:00', 23.5), 'W':('16:15:00', 23.5), 'Th':('16:15:00', 23.5), 'F':('16:15:00', 23.5)}
         self.pred_type = 'bc'
         self._model = None
         self._data = None
         self._hyperparams = None
         self._device = self.set_device()
+        self._experiment = None
+        self._last_trainable_trade_date = None
+        self.CONFIG = {
+            'data_directory':r'/home/epsilonoptima/repos/cuda prototype/',
+            'partial_filename':'spx_data',
+            'reverse_data_order':True,
+            'set_date_index':False,
+            'mlflow_uri':"////home/epsilonoptima/mlruns/",
+            'artifact_directory': '////home/epsilonoptima/mlruns/artifacts',
+            'temp_directory':'////home/epsilonoptima/mlruns/temp/'
+         }
 
     def set_device(self, gpu=0):
         if torch.cuda.is_available(): 
@@ -23,7 +34,6 @@ class ModelTrainer(ABC):
     def data(self):
         return self._data
     
-    @data.setter
     def update_data(self, **kwargs):
         self._data = self._data
 
@@ -32,7 +42,6 @@ class ModelTrainer(ABC):
         return self._hyperparams
     
     
-    @hyperparams.setter
     def update_hyperparams(self, **kwargs):
         self._hyperparams = self._hyperparams
     
@@ -41,9 +50,33 @@ class ModelTrainer(ABC):
         return self._model
     
     
-    @model.setter
     def update_model(self, **kwargs):
         self._model = self._hyperparams
+
+    @property
+    def experiment(self):
+        return self._experiment
+    
+    def update_experiment(self):
+        
+        set_experiment = True
+        
+        if self._experiment is not None:
+            if self._last_trainable_trade_date in self._experiment.name:
+                set_experiment = False
+
+        if set_experiment:
+            # Set up ML Flow
+            mlflow.set_tracking_uri(self.CONFIG['mlflow_uri'])
+            # Sets the current active experiment to the "Apple_Models" experiment and
+            # returns the Experiment metadata
+            curr_experiment = mlflow.set_experiment(f"{self.__class__.__name__}_{self._last_trainable_trade_date}")
+            self._experiment = curr_experiment
+
+    def update_data_and_experiment(self):
+        self.update_data()
+        self.update_experiment()
+
     
     @abstractmethod
     def run():
