@@ -42,7 +42,7 @@ class Test_ModelTrainer(unittest.TestCase):
         test_date = 'aa_01-17-2024'
 
 
-        trainer.update_experiment(test_date)
+        trainer.update_experiment()
 
         # Make dummy results (don't actually use Pytorch)
 

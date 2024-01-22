@@ -6,7 +6,8 @@ import mlflow
 class ModelTrainer(ABC):
     def __init__(self):
         self.pred_type = 'bc'
-        self._model = None
+        self._model_1 = None
+        self._model_2 = None
         self._data = None
         self._hyperparams = None
         self._device_1 = self.set_device()
@@ -48,11 +49,10 @@ class ModelTrainer(ABC):
     
     @property
     def model(self):
-        return self._model
-    
+        return self._model1 
     
     def update_model(self, **kwargs):
-        self._model = self._hyperparams
+        pass
 
     @property
     def experiment(self):
@@ -90,7 +90,7 @@ class ModelTrainer(ABC):
     def get_start_end_idx(self,test_set_len=252):
         return self._data.shape[0]-test_set_len, self._data.shape[0]
 
-    def make_tensors(self,ss, data, seq_len):
+    def make_tensors(self,ss, data, seq_len, device):
         X = data.iloc[:,:-1].values
         y = data.iloc[:,-1:].values
 
@@ -105,16 +105,16 @@ class ModelTrainer(ABC):
         X_test = X_ss[-1:]
         y_test = y_seq[-1:]
 
-        X_train_tensors = torch.Tensor(X_train).to(self._device)
-        y_train_tensors = torch.Tensor(y_train).to(self._device)
+        X_train_tensors = torch.Tensor(X_train).to(device)
+        y_train_tensors = torch.Tensor(y_train).to(device)
 
         # Tensor dimensions (batch size, sequence, features)
         X_train_tensors = torch.reshape(X_train_tensors,   
                                         (X_train_tensors.shape[0], seq_len, 
                                         X_train_tensors.shape[2]))
 
-        X_test_tensors = torch.Tensor(X_test).to(self._device)
-        y_test_tensors = torch.Tensor(y_test).to(self._device)
+        X_test_tensors = torch.Tensor(X_test).to(device)
+        y_test_tensors = torch.Tensor(y_test).to(device)
 
         X_test_tensors = torch.reshape(X_test_tensors,   
                                         (X_test_tensors.shape[0], seq_len, 
