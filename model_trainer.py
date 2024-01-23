@@ -19,9 +19,9 @@ class ModelTrainer(ABC):
             'partial_filename':'spx_data',
             'reverse_data_order':True,
             'set_date_index':False,
-            'mlflow_uri':"////home/epsilonoptima/mlruns/",
-            'artifact_directory': '////home/epsilonoptima/mlruns/artifacts',
-            'temp_directory':'////home/epsilonoptima/mlruns/temp/'
+            'mlflow_uri':"sqlite:////home/epsilonoptima/mlflow/mlruns.db",
+            'artifact_directory': '////home/epsilonoptima/mlflow/artifacts',
+            'temp_directory':'////home/epsilonoptima/mlflow/temp/cuda0',
          }
 
     def set_device(self, gpu=0):
@@ -45,7 +45,7 @@ class ModelTrainer(ABC):
     
     
     def update_hyperparams(self, **kwargs):
-        self._hyperparams = self._hyperparams
+        self._hyperparams = kwargs
     
     @property
     def model(self):
