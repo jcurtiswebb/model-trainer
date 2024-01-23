@@ -49,7 +49,7 @@ class ModelTrainer(ABC):
     
     @property
     def model(self):
-        return self._model1 
+        return self._model_1 
     
     def update_model(self, **kwargs):
         pass
@@ -83,9 +83,6 @@ class ModelTrainer(ABC):
     def run(self):
         pass
 
-    @abstractmethod
-    def post_results(self):
-        pass
 
     def get_start_end_idx(self,test_set_len=252):
         return self._data.shape[0]-test_set_len, self._data.shape[0]

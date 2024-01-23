@@ -1,7 +1,7 @@
 from model_trainer import ModelTrainer
 from model_store import LSTM1
-from utils.YfinanceUtils import *
-from utils.ModelTrainerUtils import *
+from utils.y_finance_utils import *
+from utils.model_trainer_utils import *
 from datetime import time
 from sklearn.preprocessing import StandardScaler
 import os
